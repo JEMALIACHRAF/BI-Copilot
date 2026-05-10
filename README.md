@@ -39,17 +39,9 @@ The Viz Agent inspects the shape of the data returned by BigQuery and decides �
 
 <br/>
 
-#### 2. Follow-up question → another KPI
 
-<div align="center">
-  <img src="docs/screenshots/average-order-value.png" alt="Follow-up question about the average order value, answered in 9.4 seconds with the KPI of $86.51 and a contextual narrative" width="900" />
-  <br/>
-  <em>Follow-up clicked from the previous answer · 9.4 s warm-cache latency · $0.0152.</em>
-</div>
 
-<br/>
-
-#### 3. Top-N comparison → auto bar chart
+#### 2. Top-N comparison → auto bar chart
 
 <div align="center">
   <img src="docs/screenshots/top-countries.png" alt="Top 10 countries by revenue rendered as an automatically-generated bar chart. China leads at over $941k, followed by United States and Brazil. A narrative explains that the top three countries account for ~80% of revenue from the top 10." width="900" />
@@ -59,7 +51,7 @@ The Viz Agent inspects the shape of the data returned by BigQuery and decides �
 
 <br/>
 
-#### 4. Temporal trend → auto line chart with growth overlay
+#### 3. Temporal trend → auto line chart with growth overlay
 
 <div align="center">
   <img src="docs/screenshots/monthly-revenue.png" alt="2024 monthly revenue rendered as a line chart with a secondary growth-percentage line. The narrative highlights March and July as peak growth months and June as the steepest decline." width="900" />
