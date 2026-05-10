@@ -1,0 +1,184 @@
+[
+  {
+    "id": "easy-001",
+    "difficulty": "easy",
+    "question": "How many users are there in total?",
+    "ground_truth_sql": "SELECT COUNT(*) AS n FROM `bigquery-public-data.thelook_ecommerce.users`"
+  },
+  {
+    "id": "easy-002",
+    "difficulty": "easy",
+    "question": "How many orders have status 'Complete'?",
+    "ground_truth_sql": "SELECT COUNT(*) AS n FROM `bigquery-public-data.thelook_ecommerce.orders` WHERE status = 'Complete'"
+  },
+  {
+    "id": "easy-003",
+    "difficulty": "easy",
+    "question": "How many distinct product categories are there?",
+    "ground_truth_sql": "SELECT COUNT(DISTINCT category) AS n FROM `bigquery-public-data.thelook_ecommerce.products`"
+  },
+  {
+    "id": "easy-004",
+    "difficulty": "easy",
+    "question": "What is the total revenue from completed orders?",
+    "ground_truth_sql": "SELECT ROUND(SUM(oi.sale_price), 2) AS total FROM `bigquery-public-data.thelook_ecommerce.order_items` oi JOIN `bigquery-public-data.thelook_ecommerce.orders` o ON oi.order_id = o.order_id WHERE o.status = 'Complete'"
+  },
+  {
+    "id": "easy-005",
+    "difficulty": "easy",
+    "question": "How many products are in the catalog?",
+    "ground_truth_sql": "SELECT COUNT(*) AS n FROM `bigquery-public-data.thelook_ecommerce.products`"
+  },
+  {
+    "id": "easy-006",
+    "difficulty": "easy",
+    "question": "How many distinct countries are our users from?",
+    "ground_truth_sql": "SELECT COUNT(DISTINCT country) AS n FROM `bigquery-public-data.thelook_ecommerce.users`"
+  },
+  {
+    "id": "easy-007",
+    "difficulty": "easy",
+    "question": "What is the average retail price of our products?",
+    "ground_truth_sql": "SELECT ROUND(AVG(retail_price), 2) AS avg_price FROM `bigquery-public-data.thelook_ecommerce.products`"
+  },
+  {
+    "id": "easy-008",
+    "difficulty": "easy",
+    "question": "How many orders have been cancelled?",
+    "ground_truth_sql": "SELECT COUNT(*) AS n FROM `bigquery-public-data.thelook_ecommerce.orders` WHERE status = 'Cancelled'"
+  },
+
+  {
+    "id": "medium-001",
+    "difficulty": "medium",
+    "question": "How many orders are there per status?",
+    "ground_truth_sql": "SELECT status, COUNT(*) AS n FROM `bigquery-public-data.thelook_ecommerce.orders` GROUP BY status ORDER BY n DESC"
+  },
+  {
+    "id": "medium-002",
+    "difficulty": "medium",
+    "question": "What are the top 5 product categories by total revenue from completed orders?",
+    "ground_truth_sql": "SELECT p.category, ROUND(SUM(oi.sale_price), 2) AS revenue FROM `bigquery-public-data.thelook_ecommerce.order_items` oi JOIN `bigquery-public-data.thelook_ecommerce.orders` o ON oi.order_id = o.order_id JOIN `bigquery-public-data.thelook_ecommerce.products` p ON oi.product_id = p.id WHERE o.status = 'Complete' GROUP BY p.category ORDER BY revenue DESC LIMIT 5"
+  },
+  {
+    "id": "medium-003",
+    "difficulty": "medium",
+    "question": "What is the average number of orders per user?",
+    "ground_truth_sql": "SELECT ROUND(COUNT(*) / COUNT(DISTINCT user_id), 2) AS avg_orders_per_user FROM `bigquery-public-data.thelook_ecommerce.orders`"
+  },
+  {
+    "id": "medium-004",
+    "difficulty": "medium",
+    "question": "What are the top 10 countries by total revenue from completed orders?",
+    "ground_truth_sql": "SELECT u.country, ROUND(SUM(oi.sale_price), 2) AS revenue FROM `bigquery-public-data.thelook_ecommerce.order_items` oi JOIN `bigquery-public-data.thelook_ecommerce.orders` o ON oi.order_id = o.order_id JOIN `bigquery-public-data.thelook_ecommerce.users` u ON o.user_id = u.id WHERE o.status = 'Complete' GROUP BY u.country ORDER BY revenue DESC LIMIT 10"
+  },
+  {
+    "id": "medium-005",
+    "difficulty": "medium",
+    "question": "What are the top 10 products by units sold (only counting completed orders)?",
+    "ground_truth_sql": "SELECT p.name, COUNT(*) AS units_sold FROM `bigquery-public-data.thelook_ecommerce.order_items` oi JOIN `bigquery-public-data.thelook_ecommerce.orders` o ON oi.order_id = o.order_id JOIN `bigquery-public-data.thelook_ecommerce.products` p ON oi.product_id = p.id WHERE o.status = 'Complete' GROUP BY p.name ORDER BY units_sold DESC LIMIT 10"
+  },
+  {
+    "id": "medium-006",
+    "difficulty": "medium",
+    "question": "What is the average sale price per product category?",
+    "ground_truth_sql": "SELECT p.category, ROUND(AVG(oi.sale_price), 2) AS avg_price FROM `bigquery-public-data.thelook_ecommerce.order_items` oi JOIN `bigquery-public-data.thelook_ecommerce.products` p ON oi.product_id = p.id GROUP BY p.category ORDER BY avg_price DESC"
+  },
+  {
+    "id": "medium-007",
+    "difficulty": "medium",
+    "question": "Top 5 brands by total revenue from completed orders",
+    "ground_truth_sql": "SELECT p.brand, ROUND(SUM(oi.sale_price), 2) AS revenue FROM `bigquery-public-data.thelook_ecommerce.order_items` oi JOIN `bigquery-public-data.thelook_ecommerce.orders` o ON oi.order_id = o.order_id JOIN `bigquery-public-data.thelook_ecommerce.products` p ON oi.product_id = p.id WHERE o.status = 'Complete' AND p.brand IS NOT NULL GROUP BY p.brand ORDER BY revenue DESC LIMIT 5"
+  },
+  {
+    "id": "medium-008",
+    "difficulty": "medium",
+    "question": "What is the gender distribution of our users?",
+    "ground_truth_sql": "SELECT gender, COUNT(*) AS n FROM `bigquery-public-data.thelook_ecommerce.users` GROUP BY gender ORDER BY n DESC"
+  },
+  {
+    "id": "medium-009",
+    "difficulty": "medium",
+    "question": "Average user age by country, including only countries with at least 100 users",
+    "ground_truth_sql": "SELECT country, ROUND(AVG(age), 1) AS avg_age, COUNT(*) AS users FROM `bigquery-public-data.thelook_ecommerce.users` GROUP BY country HAVING COUNT(*) >= 100 ORDER BY avg_age DESC"
+  },
+  {
+    "id": "medium-010",
+    "difficulty": "medium",
+    "question": "How many distinct customers placed an order in 2023?",
+    "ground_truth_sql": "SELECT COUNT(DISTINCT user_id) AS n FROM `bigquery-public-data.thelook_ecommerce.orders` WHERE EXTRACT(YEAR FROM created_at) = 2023"
+  },
+  {
+    "id": "medium-011",
+    "difficulty": "medium",
+    "question": "What are the top 5 traffic sources by user count?",
+    "ground_truth_sql": "SELECT traffic_source, COUNT(*) AS n FROM `bigquery-public-data.thelook_ecommerce.users` GROUP BY traffic_source ORDER BY n DESC LIMIT 5"
+  },
+  {
+    "id": "medium-012",
+    "difficulty": "medium",
+    "question": "How many products does each department have?",
+    "ground_truth_sql": "SELECT department, COUNT(*) AS n FROM `bigquery-public-data.thelook_ecommerce.products` GROUP BY department ORDER BY n DESC"
+  },
+
+  {
+    "id": "hard-001",
+    "difficulty": "hard",
+    "question": "For each country, what is the top selling product (by name) ranked by total revenue from completed orders?",
+    "ground_truth_sql": "WITH r AS (SELECT u.country, p.name AS product_name, SUM(oi.sale_price) AS rev FROM `bigquery-public-data.thelook_ecommerce.order_items` oi JOIN `bigquery-public-data.thelook_ecommerce.orders` o ON oi.order_id = o.order_id JOIN `bigquery-public-data.thelook_ecommerce.users` u ON o.user_id = u.id JOIN `bigquery-public-data.thelook_ecommerce.products` p ON oi.product_id = p.id WHERE o.status = 'Complete' GROUP BY u.country, p.name), ranked AS (SELECT country, product_name, rev, ROW_NUMBER() OVER (PARTITION BY country ORDER BY rev DESC) AS rn FROM r) SELECT country, product_name, ROUND(rev, 2) AS revenue FROM ranked WHERE rn = 1 ORDER BY country"
+  },
+  {
+    "id": "hard-002",
+    "difficulty": "hard",
+    "question": "What are the top 3 products (by name) in each category, ranked by total revenue from completed orders?",
+    "ground_truth_sql": "WITH r AS (SELECT p.category, p.name AS product_name, SUM(oi.sale_price) AS rev FROM `bigquery-public-data.thelook_ecommerce.order_items` oi JOIN `bigquery-public-data.thelook_ecommerce.orders` o ON oi.order_id = o.order_id JOIN `bigquery-public-data.thelook_ecommerce.products` p ON oi.product_id = p.id WHERE o.status = 'Complete' GROUP BY p.category, p.name), ranked AS (SELECT category, product_name, rev, ROW_NUMBER() OVER (PARTITION BY category ORDER BY rev DESC) AS rn FROM r) SELECT category, product_name, ROUND(rev, 2) AS revenue FROM ranked WHERE rn <= 3 ORDER BY category, rn"
+  },
+  {
+    "id": "hard-003",
+    "difficulty": "hard",
+    "question": "For each month of 2024, show the total revenue from completed orders and the percentage growth versus the previous month",
+    "ground_truth_sql": "WITH monthly AS (SELECT DATE_TRUNC(DATE(o.created_at), MONTH) AS month, SUM(oi.sale_price) AS rev FROM `bigquery-public-data.thelook_ecommerce.order_items` oi JOIN `bigquery-public-data.thelook_ecommerce.orders` o ON oi.order_id = o.order_id WHERE o.status = 'Complete' AND EXTRACT(YEAR FROM o.created_at) = 2024 GROUP BY month) SELECT month, ROUND(rev, 2) AS revenue, ROUND((rev - LAG(rev) OVER (ORDER BY month)) / LAG(rev) OVER (ORDER BY month) * 100, 2) AS mom_growth_pct FROM monthly ORDER BY month"
+  },
+  {
+    "id": "hard-004",
+    "difficulty": "hard",
+    "question": "How many users have ordered before but have NOT placed an order in the last 90 days (churned users)?",
+    "ground_truth_sql": "SELECT COUNT(*) AS churned_users FROM (SELECT user_id FROM `bigquery-public-data.thelook_ecommerce.orders` GROUP BY user_id HAVING MAX(created_at) < TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 90 DAY)) sub"
+  },
+  {
+    "id": "hard-005",
+    "difficulty": "hard",
+    "question": "Show total revenue from completed orders for each year from 2022 to 2024",
+    "ground_truth_sql": "SELECT EXTRACT(YEAR FROM o.created_at) AS year, ROUND(SUM(oi.sale_price), 2) AS revenue FROM `bigquery-public-data.thelook_ecommerce.order_items` oi JOIN `bigquery-public-data.thelook_ecommerce.orders` o ON oi.order_id = o.order_id WHERE o.status = 'Complete' AND EXTRACT(YEAR FROM o.created_at) BETWEEN 2022 AND 2024 GROUP BY year ORDER BY year"
+  },
+  {
+    "id": "hard-006",
+    "difficulty": "hard",
+    "question": "Of the users whose first order was in January 2024, how many of them placed at least one order in each subsequent month of 2024?",
+    "ground_truth_sql": "WITH first_order AS (SELECT user_id, MIN(DATE_TRUNC(DATE(created_at), MONTH)) AS cohort FROM `bigquery-public-data.thelook_ecommerce.orders` GROUP BY user_id), jan_cohort AS (SELECT user_id FROM first_order WHERE cohort = DATE '2024-01-01') SELECT DATE_TRUNC(DATE(o.created_at), MONTH) AS month, COUNT(DISTINCT o.user_id) AS active_users FROM `bigquery-public-data.thelook_ecommerce.orders` o JOIN jan_cohort j ON o.user_id = j.user_id WHERE EXTRACT(YEAR FROM o.created_at) = 2024 GROUP BY month ORDER BY month"
+  },
+  {
+    "id": "hard-007",
+    "difficulty": "hard",
+    "question": "Across all users who placed at least 2 orders, what is the overall average number of days between their consecutive orders? Return a single number.",
+    "ground_truth_sql": "WITH user_stats AS (SELECT user_id, MIN(created_at) AS first_o, MAX(created_at) AS last_o, COUNT(*) AS n FROM `bigquery-public-data.thelook_ecommerce.orders` GROUP BY user_id HAVING COUNT(*) >= 2) SELECT ROUND(AVG(TIMESTAMP_DIFF(last_o, first_o, DAY) / (n - 1)), 1) AS avg_days_between_orders FROM user_stats"
+  },
+  {
+    "id": "hard-008",
+    "difficulty": "hard",
+    "question": "How many new users signed up in each month of 2024?",
+    "ground_truth_sql": "SELECT DATE_TRUNC(DATE(created_at), MONTH) AS month, COUNT(*) AS new_users FROM `bigquery-public-data.thelook_ecommerce.users` WHERE EXTRACT(YEAR FROM created_at) = 2024 GROUP BY month ORDER BY month"
+  },
+  {
+    "id": "hard-009",
+    "difficulty": "hard",
+    "question": "Group users into 4 age buckets ('under_25' for age<25, '25_to_39' for ages 25-39, '40_to_59' for ages 40-59, '60_plus' for age>=60). Which bucket generates the most revenue from completed orders?",
+    "ground_truth_sql": "SELECT CASE WHEN u.age < 25 THEN 'under_25' WHEN u.age < 40 THEN '25_to_39' WHEN u.age < 60 THEN '40_to_59' ELSE '60_plus' END AS age_group, ROUND(SUM(oi.sale_price), 2) AS revenue FROM `bigquery-public-data.thelook_ecommerce.order_items` oi JOIN `bigquery-public-data.thelook_ecommerce.orders` o ON oi.order_id = o.order_id JOIN `bigquery-public-data.thelook_ecommerce.users` u ON o.user_id = u.id WHERE o.status = 'Complete' GROUP BY age_group ORDER BY revenue DESC"
+  },
+  {
+    "id": "hard-010",
+    "difficulty": "hard",
+    "question": "For each of the most recent 90 calendar days, compute the daily revenue from completed orders, and the 7-day rolling average of that daily revenue (current day plus 6 prior days)",
+    "ground_truth_sql": "WITH daily AS (SELECT DATE(o.created_at) AS d, SUM(oi.sale_price) AS rev FROM `bigquery-public-data.thelook_ecommerce.order_items` oi JOIN `bigquery-public-data.thelook_ecommerce.orders` o ON oi.order_id = o.order_id WHERE o.status = 'Complete' AND DATE(o.created_at) >= DATE_SUB(CURRENT_DATE(), INTERVAL 90 DAY) GROUP BY d) SELECT d AS day, ROUND(rev, 2) AS daily_revenue, ROUND(AVG(rev) OVER (ORDER BY d ROWS BETWEEN 6 PRECEDING AND CURRENT ROW), 2) AS rolling_7d_avg FROM daily ORDER BY d"
+  }
+]
