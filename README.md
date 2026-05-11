@@ -195,30 +195,6 @@ Strict comparison drops to 30% on hard questions while the judge accepts 80% of 
 
 **The lesson:** strict text-to-SQL benchmarks systematically under-score capable systems because they assume a single correct query, when many business questions admit multiple equally valid SQL implementations. Strict is the regression alarm; judge is the accuracy measurement.
 
-### Live cost & latency per query
-
-Per-question metadata captured during real runs:
-
-| Question | Rows scanned | SQL attempts | Latency | Cost |
-| --- | ---: | ---: | ---: | ---: |
-| Total revenue from completed orders | 5.2 M | 1 | 35 s (cold) | $0.0133 |
-| Average order value | 1.3 M | 1 | 9.4 s (warm) | $0.0152 |
-| Top 5 categories | 7.2 M | 1 | 41 s | $0.0193 |
-| Top product per country | 10 M | 1 | 14 s | $0.0223 |
-| Top 10 countries by revenue | 12 M | 1 | 10.8 s | $0.0216 |
-| Monthly revenue + MoM growth 2024 | 4.7 M | 1 | 22.9 s | $0.0213 |
-| 7-day rolling average over 90 days | 2.9 M | 1 | 19 s | $0.0216 |
-
-> **Cold vs warm**: the first request after restart pays a one-time cost (~25 s) for schema discovery + value sampling across all dataset tables. Subsequent requests within the 5-minute cache TTL drop to ~10 s.
-
-### Iterative improvements I made while building this
-
-While analysing benchmark failures I caught two real LLM gotchas worth documenting:
-
-1. **String filter hallucination** — solved by `APPROX_TOP_COUNT` value sampling in the Schema Inspector. Jumped hard accuracy from ~30% to 80%.
-2. **CTE / column name alias collision** — the LLM sometimes writes `WITH revenue AS (SELECT month, SUM(x) AS revenue FROM ...)`. BigQuery then interprets `revenue` in the outer SELECT as the whole CTE STRUCT, rejecting any arithmetic with a cryptic `STRUCT<...> - STRUCT<...>` error. The ReAct retry loop couldn't recover because the error message gives no hint about the alias collision. Fix: added an explicit rule with BAD/GOOD examples in the SQL prompt, plus an "error-pattern → root-cause" mapping in the retry prompt.
-
-Targeted prompt engineering on top of measurable failures is what moves real systems forward.
 
 ---
 
